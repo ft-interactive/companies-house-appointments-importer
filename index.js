@@ -2,7 +2,6 @@
 const fs_1 = require("fs");
 const stream_1 = require("stream");
 const split2 = require("split2");
-parseSnapshot('./tmp/Prod195_1754_ew_1.dat').on('data', (data) => console.dir(data));
 function getCompanyStatus(code) {
     const ret = {
         code: code.toLowerCase(),

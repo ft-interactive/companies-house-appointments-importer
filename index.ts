@@ -11,7 +11,7 @@ import * as split2 from 'split2';
 
 
 // To test, uncomment:
-parseSnapshot('./tmp/Prod195_1754_ew_1.dat').on('data', (data) => console.dir(data));
+// parseSnapshot('./tmp/Prod195_1754_ew_1.dat').on('data', (data) => console.dir(data));
 
 
 
