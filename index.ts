@@ -15,7 +15,6 @@ import * as split2 from 'split2';
 
 
 
-
 /**
  * Get company status from code
  * @param  {string} code Company status code. One of C, D, L, R or (space).
@@ -225,6 +224,7 @@ export function parseCompanyRecord(line: string): CompaniesHouseRecordCompany {
  */
 export function parsePersonRecord(line: string): CompaniesHouseRecordPerson {
   return {
+    companyNumber: line.substr(0, 8),
     origin: getAppointmentDateOrigin(line.substr(9, 1)),
     type: getAppointmentType(line.substr(10, 2)),
     number: line.substr(12, 12),
@@ -263,7 +263,7 @@ export default function parseSnapshot(path: string, condenseRecords = false): an
           const record = parsePersonRecord(line);
           record.companyNumber = line.substr(0, 8);
           callback(null, {
-            type: 'person',
+            type: 'director',
             source: 'snapshot',
             record,
           });
@@ -324,7 +324,7 @@ interface CompaniesHouseVariableData {
   countryOfResidence: string | null;
 }
 
-interface CompaniesHouseRecordCompany {
+export interface CompaniesHouseRecordCompany {
   name: string;
   number: string;
   status: CompaniesHouseCodeWithValue;
@@ -334,8 +334,8 @@ interface CompaniesHouseRecordCompany {
   };
 }
 
-interface CompaniesHouseRecordPerson {
-  companyNumber?: string;
+export interface CompaniesHouseRecordPerson {
+  companyNumber: string;
   origin: CompaniesHouseCodeWithValue;
   type: CompaniesHouseCodeWithValue;
   number: string;
