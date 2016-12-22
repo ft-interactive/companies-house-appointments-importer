@@ -17,12 +17,18 @@ if (!process.env.CONNECTION_STRING) {
   CONNECTION_STRING = process.env.CONNECTION_STRING;
 }
 
-const db = new S(CONNECTION_STRING);
+const db = new S(CONNECTION_STRING, {
+  logging: (log) => {
+    if (process.env.SHOW_QUERIES) {
+      console.info(log);
+    }
+  }
+});
 
 // Define tables
 const Company = db.define<CompanyInstance, CompaniesHouseRecordCompany>('company', {
-  name: S.STRING,
   number: S.STRING,
+  name: S.STRING,
   status: S.JSONB,
 });
 
@@ -44,7 +50,7 @@ Director.belongsTo(Company);
 Company.hasMany(Director);
 
 // Setup a few interfaces...
-interface CompanyInstance extends S.Instance<CompaniesHouseRecordCompany> {}
+interface CompanyInstance extends S.Instance<CompaniesHouseRecordCompany>, CompaniesHouseRecordCompany {}
 interface DirectorInstance extends S.Instance<CompaniesHouseRecordPerson> {
   setCompany: S.BelongsToSetAssociationMixin<CompanyInstance, string>;
 }
@@ -79,7 +85,7 @@ interface DirectorInstance extends S.Instance<CompaniesHouseRecordPerson> {
     });
   }
 
-  glob('./data/**/*.dat', (err, files) => {
+  glob('./data/companies-england-wales.dat', (err, files) => {
     const q = files.reduce(async (queue, filename) => {
       await queue;
       try {
